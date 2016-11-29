@@ -144,6 +144,14 @@ resourceTypes:
                 headers:
                   X-Content-Type-Options:
                   X-XSS-Protection:
+            "403":
+                headers:
+                  X-Context-Type-Options:
+                  X-XSS-Protection:
+            "400":
+                headers:
+                  X-Content-Type-Options:
+                  X-XSS-Protection:
     /{id}:
         uriParameters:
             id:

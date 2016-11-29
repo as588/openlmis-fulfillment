@@ -23,6 +23,7 @@ import org.openlmis.fulfillment.referencedata.model.ProgramDto;
 import org.openlmis.fulfillment.referencedata.service.FacilityReferenceDataService;
 import org.openlmis.fulfillment.referencedata.service.OrderableProductReferenceDataService;
 import org.openlmis.fulfillment.referencedata.service.ProgramReferenceDataService;
+import org.openlmis.fulfillment.referencedata.service.UserFulfillmentFacilitiesReferenceDataService;
 import org.openlmis.fulfillment.repository.OrderNumberConfigurationRepository;
 import org.openlmis.fulfillment.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,13 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -62,6 +66,8 @@ public class OrderService {
 
   @Autowired
   private OrderableProductReferenceDataService orderableProductReferenceDataService;
+  @Autowired
+  private UserFulfillmentFacilitiesReferenceDataService fulfillmentFacilitiesReferenceDataService;
 
   @Autowired
   private OrderStorage orderStorage;
@@ -216,6 +222,31 @@ public class OrderService {
     orderStorage.store(order);
 
     return order;
+  }
+
+  /**
+   * Checks if provided facility is assigned to an order.
+   * @param order checked order.
+   * @param userId UUID of user.
+   * @param facilityId UUID of facility.
+   * @return result of check.
+   */
+  public boolean isFacilityValid(Order order,UUID userId, UUID facilityId ) {
+    Set<UUID> userFacilities = fulfillmentFacilitiesReferenceDataService
+        .getFulfillmentFacilities(userId).stream().map(FacilityDto::getId)
+        .collect(Collectors.toSet());
+
+    Set<UUID> validFacilities = getAvailableSupplyingDepots(order)
+        .stream().filter(f -> userFacilities.contains(f.getId())).map(FacilityDto::getId)
+        .collect(Collectors.toSet());
+
+    return validFacilities.contains(facilityId);
+  }
+
+  private List<FacilityDto> getAvailableSupplyingDepots(Order order) {
+    Collection<FacilityDto> facilityDtos = facilityReferenceDataService
+        .searchSupplyingDepots(order.getProgramId(), order.getSupervisoryNodeId());
+    return new ArrayList<>(facilityDtos);
   }
 
 }

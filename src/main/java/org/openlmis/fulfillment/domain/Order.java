@@ -117,6 +117,11 @@ public class Order extends BaseEntity {
   @Setter
   private BigDecimal quotedCost;
 
+  @Column
+  @Getter
+  @Setter
+  private UUID supervisoryNodeId;
+
   @OneToMany(
       mappedBy = "order",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE},
@@ -156,6 +161,7 @@ public class Order extends BaseEntity {
     this.orderCode = order.orderCode;
     this.status = order.status;
     this.quotedCost = order.quotedCost;
+    this.supervisoryNodeId = order.supervisoryNodeId;
   }
 
   public void forEachLine(Consumer<OrderLineItem> consumer) {

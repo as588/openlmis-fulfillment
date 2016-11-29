@@ -117,6 +117,7 @@ public class ProofOfDeliveryControllerIntegrationTest extends BaseWebIntegration
     order.setSupplyingFacilityId(facility.getId());
     order.setRequestingFacilityId(facility.getId());
     order.setReceivingFacilityId(facility.getId());
+    order.setSupervisoryNodeId(supervisoryNode.getId());
 
     given(orderRepository.findOne(order.getId())).willReturn(order);
     given(orderRepository.exists(order.getId())).willReturn(true);

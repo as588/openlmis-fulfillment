@@ -71,6 +71,10 @@
         "$ref": "orderLineItem.json"
       },
       "uniqueItems": false
+    },
+    "supervisoryNodeId": {
+      "type": "string",
+      "title": "supervisoryNodeId"
     }
   },
   "required": [

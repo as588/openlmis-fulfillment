@@ -1,6 +1,8 @@
 package org.openlmis.fulfillment.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.atLeastOnce;
@@ -26,6 +28,7 @@ import org.openlmis.fulfillment.referencedata.model.OrderableProductDto;
 import org.openlmis.fulfillment.referencedata.service.OrderableProductReferenceDataService;
 import org.openlmis.fulfillment.referencedata.model.ProgramDto;
 import org.openlmis.fulfillment.referencedata.service.ProgramReferenceDataService;
+import org.openlmis.fulfillment.referencedata.service.UserFulfillmentFacilitiesReferenceDataService;
 import org.openlmis.fulfillment.repository.OrderNumberConfigurationRepository;
 import org.openlmis.fulfillment.repository.OrderRepository;
 
@@ -40,6 +43,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -60,6 +64,9 @@ public class OrderServiceTest {
 
   @Mock
   private ProgramReferenceDataService programReferenceDataService;
+
+  @Mock
+  private UserFulfillmentFacilitiesReferenceDataService fulfillmentFacilitiesReferenceDataService;
 
   @Mock
   private FacilityReferenceDataService facilityReferenceDataService;
@@ -165,6 +172,75 @@ public class OrderServiceTest {
 
     // then
     assertEquals(expectedOutput, receivedOutput);
+  }
+
+  @Test
+  public void shouldValidateFacility() {
+    // given
+    UUID facilityId = UUID.randomUUID();
+
+    FacilityDto facilityDto =  new FacilityDto();
+    facilityDto.setId(facilityId);
+
+    Collection<FacilityDto> facilityDtos = new ArrayList<>();
+    facilityDtos.add(facilityDto);
+
+    Order order = new Order();
+
+    UUID programId = UUID.randomUUID();
+    UUID supervisoryNodeId = UUID.randomUUID();
+
+    order.setProgramId(programId);
+    order.setSupervisoryNodeId(supervisoryNodeId);
+    UUID userId = UUID.randomUUID();
+    // when
+
+    when(fulfillmentFacilitiesReferenceDataService.getFulfillmentFacilities(userId))
+        .thenReturn(facilityDtos);
+    when(facilityReferenceDataService.searchSupplyingDepots(programId, supervisoryNodeId))
+        .thenReturn(facilityDtos);
+
+    boolean result = orderService.isFacilityValid(order, userId, facilityId);
+    // then
+    assertTrue(result);
+  }
+
+  @Test
+  public void shouldNotValidateFacility() {
+    // given
+    UUID facilityId = UUID.randomUUID();
+    UUID facilityId2 = UUID.randomUUID();
+
+    FacilityDto facilityDto =  new FacilityDto();
+    facilityDto.setId(facilityId);
+
+    Collection<FacilityDto> facilityDtos = new ArrayList<>();
+    facilityDtos.add(facilityDto);
+
+    FacilityDto facilityDto2 =  new FacilityDto();
+    facilityDto.setId(facilityId2);
+
+    Collection<FacilityDto> facilityDtos2 = new ArrayList<>();
+    facilityDtos2.add(facilityDto2);
+
+    UUID programId = UUID.randomUUID();
+    UUID supervisoryNodeId = UUID.randomUUID();
+
+    Order order = new Order();
+    order.setProgramId(programId);
+    order.setSupervisoryNodeId(supervisoryNodeId);
+
+    UUID userId = UUID.randomUUID();
+    // when
+
+    when(fulfillmentFacilitiesReferenceDataService.getFulfillmentFacilities(userId))
+        .thenReturn(facilityDtos);
+    when(facilityReferenceDataService.searchSupplyingDepots(programId, supervisoryNodeId))
+        .thenReturn(facilityDtos2);
+
+    boolean result = orderService.isFacilityValid(order, userId, facilityId);
+    // then
+    assertFalse(result);
   }
 
   private Order generateOrder() {

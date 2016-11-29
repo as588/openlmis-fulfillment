@@ -68,13 +68,16 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
     this.setUpBootstrapData();
 
     firstOrder = addOrder(UUID.randomUUID(), facility, period1, "orderCode", UUID.randomUUID(),
-        INITIAL_USER_ID, facility, facility, facility, OrderStatus.ORDERED, new BigDecimal("1.29"));
+        INITIAL_USER_ID, facility, facility, facility, OrderStatus.ORDERED,
+        new BigDecimal("1" + ".29"), UUID.randomUUID());
 
     secondOrder = addOrder(UUID.randomUUID(), facility2, period1, "O2", program1, INITIAL_USER_ID,
-        facility2, facility2, facility1, OrderStatus.RECEIVED, new BigDecimal(100));
+        facility2, facility2, facility1, OrderStatus.RECEIVED, new BigDecimal(100),
+        UUID.randomUUID());
 
     thirdOrder = addOrder(UUID.randomUUID(), facility2, period2, "O3", program2, INITIAL_USER_ID,
-        facility2, facility2, facility1, OrderStatus.RECEIVED, new BigDecimal(200));
+        facility2, facility2, facility1, OrderStatus.RECEIVED, new BigDecimal(200),
+        UUID.randomUUID());
 
     addOrderLineItem(secondOrder, product1, 35L, 50L);
 
@@ -109,7 +112,8 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
   private Order addOrder(UUID requisition, UUID facility, UUID processingPeriod,
                          String orderCode, UUID program, UUID user,
                          UUID requestingFacility, UUID receivingFacility,
-                         UUID supplyingFacility, OrderStatus orderStatus, BigDecimal cost) {
+                         UUID supplyingFacility, OrderStatus orderStatus, BigDecimal cost,
+                         UUID supervisoryNodeId) {
     Order order = new Order();
     order.setId(UUID.randomUUID());
     order.setExternalId(requisition);
@@ -126,6 +130,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
     order.setReceivingFacilityId(receivingFacility);
     order.setSupplyingFacilityId(supplyingFacility);
     order.setOrderLineItems(new ArrayList<>());
+    order.setSupervisoryNodeId(supervisoryNodeId);
 
     given(orderRepository.findOne(order.getId())).willReturn(order);
     given(orderRepository.exists(order.getId())).willReturn(true);
@@ -311,6 +316,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
   @Test
   public void shouldCreateOrder() {
     firstOrder.getOrderLineItems().clear();
+    firstOrder.setSupplyingFacilityId(UUID.fromString(FACILITY_ID));
 
     restAssured.given()
         .queryParam(ACCESS_TOKEN, getToken())
@@ -418,6 +424,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
     given(orderRepository.save(any(Order.class))).willThrow(DataIntegrityViolationException.class);
 
     firstOrder.getOrderLineItems().clear();
+    firstOrder.setSupplyingFacilityId(UUID.fromString(FACILITY_ID));
 
     given(orderRepository.findOne(firstOrder.getId())).willReturn(firstOrder);
     firstOrder.setOrderLineItems(null);
