@@ -10,13 +10,9 @@ import org.openlmis.fulfillment.service.OrderFileException;
 import org.openlmis.fulfillment.service.OrderFileTemplateService;
 import org.openlmis.fulfillment.service.OrderPdfWriteException;
 import org.openlmis.fulfillment.service.OrderService;
-<<<<<<< 3b63656e0beaaf7c3c0b44c5b94ccfdb1822b2a5
 import org.openlmis.fulfillment.service.OrderStorageException;
 import org.openlmis.fulfillment.service.OrderCsvHelper;
-=======
 import org.openlmis.fulfillment.service.PermissionService;
-import org.openlmis.fulfillment.web.util.OrderCsvHelper;
->>>>>>> OLMIS-1385 Added permission check to create endpoint.
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +65,7 @@ public class OrderController extends BaseController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public ResponseEntity<?> createOrder(@RequestBody Order order) throws IOException,
-      OrderFileException, OrderStorageException{
+      OrderFileException, OrderStorageException {
 
     LOGGER.debug("Checking rights to create order");
     try {

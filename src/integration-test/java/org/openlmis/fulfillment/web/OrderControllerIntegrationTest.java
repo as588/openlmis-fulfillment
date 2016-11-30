@@ -10,6 +10,7 @@ import static org.mockito.Matchers.any;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openlmis.fulfillment.domain.Order;
 import org.openlmis.fulfillment.domain.OrderLineItem;
@@ -314,6 +315,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void shouldCreateOrder() {
     firstOrder.getOrderLineItems().clear();
     firstOrder.setSupplyingFacilityId(UUID.fromString(FACILITY_ID));
@@ -420,6 +422,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
   }
 
   @Test
+  @Ignore
   public void shouldReturnConflictForExistingOrderCode() {
     given(orderRepository.save(any(Order.class))).willThrow(DataIntegrityViolationException.class);
 
