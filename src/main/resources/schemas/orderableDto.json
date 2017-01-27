@@ -1,8 +1,8 @@
 {
   "type": "object",
   "$schema": "http://json-schema.org/draft-04/schema",
-  "title": "Orderable Product",
-  "description": "A single orderableProduct",
+  "title": "Orderable",
+  "description": "A single orderable",
   "properties": {
     "id": {
       "type": "string",
@@ -33,7 +33,7 @@
       "title": "programs",
       "items": {
         "type": "object",
-        "$ref": "programProduct.json"
+        "$ref": "programOrderable.json"
       },
       "uniqueItems": true
     }

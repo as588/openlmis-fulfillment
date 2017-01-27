@@ -31,7 +31,7 @@ import org.openlmis.fulfillment.repository.OrderRepository;
 import org.openlmis.fulfillment.repository.ProofOfDeliveryRepository;
 import org.openlmis.fulfillment.repository.TemplateRepository;
 import org.openlmis.fulfillment.service.referencedata.FacilityDto;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
 import org.openlmis.fulfillment.service.referencedata.ProcessingPeriodDto;
 import org.openlmis.fulfillment.service.referencedata.ProcessingScheduleDto;
 import org.openlmis.fulfillment.service.referencedata.ProgramDto;
@@ -86,7 +86,7 @@ public class ProofOfDeliveryControllerIntegrationTest extends BaseWebIntegration
   public void setUp() {
     this.setUpBootstrapData();
 
-    OrderableProductDto product = new OrderableProductDto();
+    OrderableDto product = new OrderableDto();
     product.setId(UUID.randomUUID());
 
     FacilityDto facility = new FacilityDto();
@@ -136,7 +136,7 @@ public class ProofOfDeliveryControllerIntegrationTest extends BaseWebIntegration
 
     OrderLineItem orderLineItem = new OrderLineItem();
     orderLineItem.setId(UUID.randomUUID());
-    orderLineItem.setOrderableProductId(product.getId());
+    orderLineItem.setOrderableId(product.getId());
     orderLineItem.setOrderedQuantity(100L);
     orderLineItem.setFilledQuantity(100L);
     orderLineItem.setApprovedQuantity(0L);

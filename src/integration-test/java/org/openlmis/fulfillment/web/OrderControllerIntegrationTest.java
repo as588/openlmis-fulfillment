@@ -188,7 +188,7 @@ public class OrderControllerIntegrationTest extends BaseWebIntegrationTest {
     OrderLineItem orderLineItem = new OrderLineItem();
     orderLineItem.setId(UUID.randomUUID());
     orderLineItem.setOrder(order);
-    orderLineItem.setOrderableProductId(product);
+    orderLineItem.setOrderableId(product);
     orderLineItem.setOrderedQuantity(orderedQuantity);
     orderLineItem.setFilledQuantity(filledQuantity);
     orderLineItem.setApprovedQuantity(3L);

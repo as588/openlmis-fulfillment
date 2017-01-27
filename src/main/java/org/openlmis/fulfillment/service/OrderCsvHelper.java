@@ -9,10 +9,10 @@ import org.openlmis.fulfillment.domain.OrderFileColumn;
 import org.openlmis.fulfillment.domain.OrderFileTemplate;
 import org.openlmis.fulfillment.domain.OrderLineItem;
 import org.openlmis.fulfillment.service.referencedata.FacilityDto;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
 import org.openlmis.fulfillment.service.referencedata.ProcessingPeriodDto;
 import org.openlmis.fulfillment.service.referencedata.FacilityReferenceDataService;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductReferenceDataService;
+import org.openlmis.fulfillment.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.PeriodReferenceDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class OrderCsvHelper {
   private static final String ORDER = "order";
 
   private static final String FACILITY = "Facility";
-  private static final String PRODUCT = "OrderableProduct";
+  private static final String PRODUCT = "Orderable";
   private static final String PERIOD = "ProcessingPeriod";
 
   private static final String LINE_SEPARATOR = "\r\n";
@@ -44,7 +44,7 @@ public class OrderCsvHelper {
   private PeriodReferenceDataService periodReferenceDataService;
 
   @Autowired
-  private OrderableProductReferenceDataService orderableProductReferenceDataService;
+  private OrderableReferenceDataService orderableReferenceDataService;
 
   /**
    * Exporting order to csv.
@@ -159,7 +159,7 @@ public class OrderCsvHelper {
         columnValue = getValue(facility, orderFileColumn.getRelatedKeyPath());
         break;
       case PRODUCT:
-        OrderableProductDto product = orderableProductReferenceDataService.findOne(relatedId);
+        OrderableDto product = orderableReferenceDataService.findOne(relatedId);
         columnValue = getValue(product, orderFileColumn.getRelatedKeyPath());
         break;
       case PERIOD:

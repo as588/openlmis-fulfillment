@@ -7,12 +7,12 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ProgramProductDto {
+public class ProgramOrderableDto {
   private UUID programId;
   private UUID productId;
-  private UUID productCategoryId;
-  private String productCategoryDisplayName;
-  private Integer productCategoryDisplayOrder;
+  private UUID orderableDisplayCategoryId;
+  private String orderableDisplayCategoryDisplayName;
+  private Integer orderableDisplayCategoryDisplayOrder;
   private Boolean active;
   private Boolean fullSupply;
   private Integer displayOrder;

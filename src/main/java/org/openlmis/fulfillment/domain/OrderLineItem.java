@@ -1,7 +1,7 @@
 package org.openlmis.fulfillment.domain;
 
 import org.hibernate.annotations.Type;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class OrderLineItem extends BaseEntity {
   @Getter
   @Setter
   @Type(type = UUID_TYPE)
-  private UUID orderableProductId;
+  private UUID orderableId;
 
   @Column(nullable = false)
   @Getter
@@ -61,8 +61,8 @@ public class OrderLineItem extends BaseEntity {
     OrderLineItem orderLineItem = new OrderLineItem();
     orderLineItem.setId(importer.getId());
 
-    Optional.ofNullable(importer.getOrderableProduct())
-        .ifPresent(product -> orderLineItem.setOrderableProductId(product.getId()));
+    Optional.ofNullable(importer.getOrderable())
+        .ifPresent(product -> orderLineItem.setOrderableId(product.getId()));
 
     orderLineItem.setOrderedQuantity(importer.getOrderedQuantity());
     orderLineItem.setFilledQuantity(importer.getFilledQuantity());
@@ -75,7 +75,7 @@ public class OrderLineItem extends BaseEntity {
   public interface Exporter {
     void setId(UUID id);
 
-    void setOrderableProduct(OrderableProductDto orderableProduct);
+    void setOrderable(OrderableDto orderable);
 
     void setOrderedQuantity(Long orderedQuantity);
 
@@ -90,7 +90,7 @@ public class OrderLineItem extends BaseEntity {
   public interface Importer {
     UUID getId();
 
-    OrderableProductDto getOrderableProduct();
+    OrderableDto getOrderable();
 
     Long getOrderedQuantity();
 

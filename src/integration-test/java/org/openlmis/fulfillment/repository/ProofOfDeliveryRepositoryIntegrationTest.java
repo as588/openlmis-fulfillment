@@ -49,7 +49,7 @@ public class ProofOfDeliveryRepositoryIntegrationTest extends
     order.setReceivingFacilityId(UUID.randomUUID());
     order.setSupplyingFacilityId(UUID.randomUUID());
 
-    orderLineItem.setOrderableProductId(UUID.randomUUID());
+    orderLineItem.setOrderableId(UUID.randomUUID());
     orderLineItem.setOrderedQuantity(100L);
     orderLineItem.setFilledQuantity(100L);
     orderLineItem.setApprovedQuantity(0L);

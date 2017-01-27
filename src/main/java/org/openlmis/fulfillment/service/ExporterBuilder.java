@@ -6,7 +6,7 @@ import org.openlmis.fulfillment.domain.Order;
 import org.openlmis.fulfillment.domain.OrderLineItem;
 import org.openlmis.fulfillment.service.referencedata.BaseReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.FacilityReferenceDataService;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductReferenceDataService;
+import org.openlmis.fulfillment.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.PeriodReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.UserReferenceDataService;
@@ -32,7 +32,7 @@ public class ExporterBuilder {
   private PeriodReferenceDataService periods;
 
   @Autowired
-  private OrderableProductReferenceDataService products;
+  private OrderableReferenceDataService products;
 
   /**
    * Copy data from the given order to the instance that implemenet {@link Order.Exporter}
@@ -62,7 +62,7 @@ public class ExporterBuilder {
   public void export(OrderLineItem item, OrderLineItem.Exporter exporter) {
     exporter.setId(item.getId());
     exporter.setApprovedQuantity(item.getApprovedQuantity());
-    exporter.setOrderableProduct(getIfPresent(products, item.getOrderableProductId()));
+    exporter.setOrderable(getIfPresent(products, item.getOrderableId()));
     exporter.setFilledQuantity(item.getFilledQuantity());
     exporter.setOrderedQuantity(item.getOrderedQuantity());
     exporter.setPacksToShip(item.getPacksToShip());

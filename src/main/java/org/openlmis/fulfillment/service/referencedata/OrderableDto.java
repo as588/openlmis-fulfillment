@@ -8,13 +8,13 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class OrderableProductDto {
+public class OrderableDto {
   private UUID id;
   private String productCode;
   private String name;
   private long packSize;
   private long packRoundingThreshold;
   private boolean roundToZero;
-  private Set<ProgramProductDto> programs;
+  private Set<ProgramOrderableDto> programs;
   private DispensableDto dispensable;
 }

@@ -40,8 +40,8 @@ import org.openlmis.fulfillment.service.notification.NotificationRequest;
 import org.openlmis.fulfillment.service.notification.NotificationService;
 import org.openlmis.fulfillment.service.referencedata.FacilityDto;
 import org.openlmis.fulfillment.service.referencedata.FacilityReferenceDataService;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductReferenceDataService;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.ProgramDto;
 import org.openlmis.fulfillment.service.referencedata.ProgramReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.UserDto;
@@ -80,7 +80,7 @@ public class OrderServiceTest {
   private ProgramReferenceDataService programReferenceDataService;
 
   @Mock
-  private OrderableProductReferenceDataService orderableProductReferenceDataService;
+  private OrderableReferenceDataService orderableReferenceDataService;
 
   @Mock
   private UserReferenceDataService userReferenceDataService;
@@ -242,10 +242,10 @@ public class OrderServiceTest {
     header.add(OrderService.DEFAULT_COLUMNS[4]);
     header.add(OrderService.DEFAULT_COLUMNS[5]);
 
-    OrderableProductDto orderableProductDto = mock(OrderableProductDto.class);
-    when(orderableProductReferenceDataService.findOne(any())).thenReturn(orderableProductDto);
-    when(orderableProductDto.getProductCode()).thenReturn("productCode");
-    when(orderableProductDto.getName()).thenReturn("product");
+    OrderableDto orderableDto = mock(OrderableDto.class);
+    when(orderableReferenceDataService.findOne(any())).thenReturn(orderableDto);
+    when(orderableDto.getProductCode()).thenReturn("productCode");
+    when(orderableDto.getName()).thenReturn("product");
 
     String expectedOutput = prepareExpectedCsvOutput(order, header);
 
@@ -304,7 +304,7 @@ public class OrderServiceTest {
     OrderLineItem expectedLineItem = expected.getOrderLineItems().iterator().next();
 
     assertEquals(expectedLineItem.getOrderedQuantity(), actualLineItem.getOrderedQuantity());
-    assertEquals(expectedLineItem.getOrderableProductId(), actualLineItem.getOrderableProductId());
+    assertEquals(expectedLineItem.getOrderableId(), actualLineItem.getOrderableId());
   }
 
   private void generateMocks() throws ConfigurationSettingException {

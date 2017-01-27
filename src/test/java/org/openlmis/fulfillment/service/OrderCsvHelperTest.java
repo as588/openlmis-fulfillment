@@ -16,10 +16,10 @@ import org.openlmis.fulfillment.domain.OrderFileTemplate;
 import org.openlmis.fulfillment.domain.OrderLineItem;
 import org.openlmis.fulfillment.service.referencedata.DispensableDto;
 import org.openlmis.fulfillment.service.referencedata.FacilityDto;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
 import org.openlmis.fulfillment.service.referencedata.ProcessingPeriodDto;
 import org.openlmis.fulfillment.service.referencedata.FacilityReferenceDataService;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductReferenceDataService;
+import org.openlmis.fulfillment.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.PeriodReferenceDataService;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class OrderCsvHelperTest {
 
   private static final String ORDER = "order";
   private static final String LINE_ITEM = "lineItem";
-  private static final String ORDERABLE_PRODUCT = "orderableProductId";
+  private static final String ORDERABLE = "orderableId";
 
   private static final String ORDER_NUMBER = "Order number";
   private static final String PRODUCT_CODE = "Product code";
@@ -53,7 +53,7 @@ public class OrderCsvHelperTest {
   private PeriodReferenceDataService periodReferenceDataService;
 
   @Mock
-  private OrderableProductReferenceDataService orderableProductReferenceDataService;
+  private OrderableReferenceDataService orderableReferenceDataService;
 
   @InjectMocks
   private OrderCsvHelper orderCsvHelper;
@@ -71,8 +71,8 @@ public class OrderCsvHelperTest {
     when(periodReferenceDataService.findOne(periodId)).thenReturn(createPeriod());
 
     UUID productId = order.getOrderLineItems()
-        .get(0).getOrderableProductId();
-    when(orderableProductReferenceDataService.findOne(productId)).thenReturn(createProduct());
+        .get(0).getOrderableId();
+    when(orderableReferenceDataService.findOne(productId)).thenReturn(createProduct());
   }
 
   @Test
@@ -106,8 +106,8 @@ public class OrderCsvHelperTest {
   @Test
   public void shouldExportOrderLineItemFields() throws IOException {
     List<OrderFileColumn> orderFileColumns = new ArrayList<>();
-    orderFileColumns.add(new OrderFileColumn(true, "header.orderableProduct", "Product",
-        true, 1, null, LINE_ITEM, ORDERABLE_PRODUCT, null, null, null));
+    orderFileColumns.add(new OrderFileColumn(true, "header.orderable", "Product",
+        true, 1, null, LINE_ITEM, ORDERABLE, null, null, null));
     orderFileColumns.add(new OrderFileColumn(true, "header.quantity.approved", APPROVED_QUANTITY,
         true, 2, null, LINE_ITEM, "approvedQuantity", null, null, null));
 
@@ -115,7 +115,7 @@ public class OrderCsvHelperTest {
 
     String csv = writeCsvFile(order, orderFileTemplate);
 
-    assertTrue(csv.startsWith(order.getOrderLineItems().get(0).getOrderableProductId()
+    assertTrue(csv.startsWith(order.getOrderLineItems().get(0).getOrderableId()
         + ",1"));
   }
 
@@ -124,8 +124,8 @@ public class OrderCsvHelperTest {
     List<OrderFileColumn> orderFileColumns = new ArrayList<>();
     orderFileColumns.add(new OrderFileColumn(true, "header.order.number", ORDER_NUMBER,
         true, 1, null, ORDER, "orderCode", null, null, null));
-    orderFileColumns.add(new OrderFileColumn(true, "header.orderableProduct", "Product",
-        true, 2, null, LINE_ITEM, ORDERABLE_PRODUCT, null, null, null));
+    orderFileColumns.add(new OrderFileColumn(true, "header.orderable", "Product",
+        true, 2, null, LINE_ITEM, ORDERABLE, null, null, null));
     orderFileColumns.add(new OrderFileColumn(true, "header.approved.quantity", APPROVED_QUANTITY,
         false, 3, null, LINE_ITEM, "approvedQuantity", null, null, null));
     orderFileColumns.add(new OrderFileColumn(true, "header.order.date", ORDER_DATE,
@@ -143,9 +143,9 @@ public class OrderCsvHelperTest {
     orderFileColumns.add(new OrderFileColumn(true, "header.facility.code", "Facility code",
         true, 1, null, ORDER, "facilityId", "Facility", "code", null));
     orderFileColumns.add(new OrderFileColumn(true, "header.product.code", PRODUCT_CODE,
-        true, 2, null, LINE_ITEM, ORDERABLE_PRODUCT, "OrderableProduct", "productCode", null));
+        true, 2, null, LINE_ITEM, ORDERABLE, "Orderable", "productCode", null));
     orderFileColumns.add(new OrderFileColumn(true, "header.product.name", "Product name",
-        true, 3, null, LINE_ITEM, ORDERABLE_PRODUCT, "OrderableProduct", "name", null));
+        true, 3, null, LINE_ITEM, ORDERABLE, "Orderable", "name", null));
     orderFileColumns.add(new OrderFileColumn(true, "header.period", PERIOD, true, 4,
         "MM/yy", ORDER, "processingPeriodId", "ProcessingPeriod", "startDate", null));
 
@@ -180,7 +180,7 @@ public class OrderCsvHelperTest {
 
   private Order createOrder() {
     OrderLineItem orderLineItem = new OrderLineItem();
-    orderLineItem.setOrderableProductId(UUID.randomUUID());
+    orderLineItem.setOrderableId(UUID.randomUUID());
     orderLineItem.setApprovedQuantity(1L);
 
     Order order = new Order();
@@ -209,8 +209,8 @@ public class OrderCsvHelperTest {
     return period;
   }
 
-  private OrderableProductDto createProduct() {
-    OrderableProductDto product = new OrderableProductDto();
+  private OrderableDto createProduct() {
+    OrderableDto product = new OrderableDto();
     product.setProductCode("productCode");
     product.setName("productName");
     product.setDispensable(new DispensableDto("each"));

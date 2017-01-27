@@ -69,9 +69,9 @@
                     prodc.code
              FROM fulfillment.proof_of_delivery_line_items podl
              INNER JOIN  fulfillment.order_line_items ol on podl.orderlineitemid = ol.id
-             INNER JOIN  referencedata.orderable_products prod on prod.id = ol.orderableproductid
-             INNER JOIN  referencedata.program_products progp on progp.productid = ol.id
-             INNER JOIN  referencedata.product_categories prodc on prodc.id = progp.productcategoryid
+             INNER JOIN  referencedata.orderable prod on prod.id = ol.orderableid
+             INNER JOIN  referencedata.program_orderables progp on progp.productid = ol.id
+             INNER JOIN  referencedata.product_categories prodc on prodc.id = progp.orderabledisplaycategoryid
              WHERE  podl.proofofdeliveryid  = $P!{pod_id}
              ORDER BY prod.name, LOWER(prod.name), prod.name NULLS LAST, LOWER(prod.name)]]>
 	</queryString>
@@ -86,7 +86,7 @@
 	<field name="primaryname" class="java.lang.String"/>
 	<field name="dispensingUnit" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
-	<group name="productCategory">
+	<group name="orderableDisplayCategory">
 		<groupExpression><![CDATA[$F{name}]]></groupExpression>
 		<groupHeader>
 			<band height="20">

@@ -191,15 +191,15 @@ public abstract class BaseWebIntegrationTest {
       + " \"code\":\"Facility Type Code\""
       + "}";
 
-  private static final String MOCK_FIND_PRODUCT_CATEGORY = "{"
+  private static final String MOCK_FIND_ORDERABLE_DISPLAY_CATEGORY = "{"
       + " \"id\":\"6d469a06-8962-11e6-ae22-56b6b6499611\""
       + "}";
 
-  private static final String MOCK_FIND_PROGRAM_PRODUCT = "{"
+  private static final String MOCK_FIND_PROGRAM_ORDERABLE = "{"
       + " \"id\":\"047cb32a-8962-11e6-ae22-56b6b6499611\","
       + " \"program\":" + MOCK_FIND_PROGRAM_RESULT + ","
       + " \"product\":" + MOCK_FIND_PRODUCT_RESULT + ","
-      + " \"productCategory\":" + MOCK_FIND_PRODUCT_CATEGORY
+      + " \"OrderableDisplayCategory\":" + MOCK_FIND_ORDERABLE_DISPLAY_CATEGORY
       + "}";
 
   private static final String MOCK_SEARCH_SUPPLY_LINE_RESULT = "[{\n"
@@ -212,7 +212,7 @@ public abstract class BaseWebIntegrationTest {
   private static final String MOCK_SEARCH_FACILITY_TYPE_APPROVED_PRODUCTS = "[{"
       + " \"id\":\"d0d5e0d6-8962-11e6-ae22-56b6b6499611\","
       + " \"facilityType\":" + MOCK_FIND_FACILITY_TYPE + ","
-      + " \"programProduct\":" + MOCK_FIND_PROGRAM_PRODUCT + ","
+      + " \"programOrderable\":" + MOCK_FIND_PROGRAM_ORDERABLE + ","
       + " \"maxMonthStock\": 2"
       + "}]";
 
@@ -341,8 +341,8 @@ public abstract class BaseWebIntegrationTest {
             .withHeader(CONTENT_TYPE, APPLICATION_JSON)
             .withBody(MOCK_FIND_FACILITY_RESULT)));
 
-    // This mocks for find one orderableproduct
-    wireMockRule.stubFor(get(urlMatching("/api/orderableProducts/" + UUID_REGEX + ".*"))
+    // This mocks for find one orderable
+    wireMockRule.stubFor(get(urlMatching("/api/orderables/" + UUID_REGEX + ".*"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON)
             .withBody(MOCK_FIND_PRODUCT_RESULT)));
@@ -445,12 +445,12 @@ public abstract class BaseWebIntegrationTest {
     );
     OrderFileColumn column3 = addOrderFileColumn(
         "752cda76-0db5-4b6e-bb79-0f531ab78e2e", true, "fulfillment.header.product.code",
-        "Product code", true, 3, null, "lineItem", "orderableProductId", "OrderableProduct",
+        "Product code", true, 3, null, "lineItem", "orderableId", "Orderable",
         "productCode", template
     );
     OrderFileColumn column4 = addOrderFileColumn(
         "9e825396-269d-4873-baa4-89054e2722f5", true, "fulfillment.header.product.name",
-        "Product name", true, 4, null, "lineItem", "orderableProductId", "OrderableProduct",
+        "Product name", true, 4, null, "lineItem", "orderableId", "Orderable",
         "name", template
     );
     OrderFileColumn column5 = addOrderFileColumn(

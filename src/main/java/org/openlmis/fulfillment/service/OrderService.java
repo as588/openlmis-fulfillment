@@ -31,8 +31,8 @@ import org.openlmis.fulfillment.repository.TransferPropertiesRepository;
 import org.openlmis.fulfillment.service.notification.NotificationService;
 import org.openlmis.fulfillment.service.referencedata.FacilityDto;
 import org.openlmis.fulfillment.service.referencedata.FacilityReferenceDataService;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductReferenceDataService;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableReferenceDataService;
 import org.openlmis.fulfillment.service.referencedata.UserReferenceDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +69,7 @@ public class OrderService {
   private FacilityReferenceDataService facilityReferenceDataService;
 
   @Autowired
-  private OrderableProductReferenceDataService orderableProductReferenceDataService;
+  private OrderableReferenceDataService orderableReferenceDataService;
 
   @Autowired
   private UserReferenceDataService userReferenceDataService;
@@ -197,8 +197,8 @@ public class OrderService {
     for (OrderLineItem orderLineItem : orderLineItems) {
       Map<String, Object> row = new HashMap<>();
 
-      OrderableProductDto product = orderableProductReferenceDataService
-          .findOne(orderLineItem.getOrderableProductId());
+      OrderableDto product = orderableReferenceDataService
+          .findOne(orderLineItem.getOrderableId());
 
       row.put(DEFAULT_COLUMNS[0], facilityCode);
       row.put(DEFAULT_COLUMNS[1], createdDate);

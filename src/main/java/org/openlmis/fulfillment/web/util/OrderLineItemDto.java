@@ -2,7 +2,7 @@ package org.openlmis.fulfillment.web.util;
 
 import org.openlmis.fulfillment.domain.OrderLineItem;
 import org.openlmis.fulfillment.service.ExporterBuilder;
-import org.openlmis.fulfillment.service.referencedata.OrderableProductDto;
+import org.openlmis.fulfillment.service.referencedata.OrderableDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class OrderLineItemDto implements OrderLineItem.Importer, OrderLineItem.Exporter {
 
   private UUID id;
-  private OrderableProductDto orderableProduct;
+  private OrderableDto orderable;
   private Long orderedQuantity;
   private Long filledQuantity;
   private Long approvedQuantity;
